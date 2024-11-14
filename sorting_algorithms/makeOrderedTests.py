@@ -12,9 +12,9 @@ def gerar_valores_ordenados(quantidade, caminho_arquivo, ordem):
         arquivo.write(" ".join(map(str, valores)))
 
 # Parâmetros
-quantidade_valores = 100  # Quantidade desejada de valores
-caminho_arquivo = "tests/reversed/100.in"
-ordem = "decrescente"  # Pode ser 'crescente' ou 'decrescente'
+quantidade_valores = 100 # Quantidade desejada de valores
+caminho_arquivo = "./tests/crescente/100.in"
+ordem = "crescente"  # Pode ser 'crescente' ou 'decrescente'
 
 # Gerar e salvar os valores ordenados
 gerar_valores_ordenados(quantidade_valores, caminho_arquivo, ordem)

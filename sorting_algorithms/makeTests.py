@@ -9,8 +9,8 @@ def gerar_valores_aleatorios(quantidade, caminho_arquivo):
         arquivo.write(" ".join(valores))
 
 # Parâmetros
-quantidade_valores = 100000  # Defina a quantidade desejada
-caminho_arquivo = "tests/random/100000_5.in"
+quantidade_valores = 100000 # Defina a quantidade desejada
+caminho_arquivo = "tests/aleatorio/100000_5.in"
 
 # Gerar e salvar os valores
 gerar_valores_aleatorios(quantidade_valores, caminho_arquivo)

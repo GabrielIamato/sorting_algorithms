@@ -3,6 +3,7 @@
 #include<time.h>
 #include<stdbool.h>
 #include<limits.h>
+int comp_chaves, mov_registros;
 /*Bubble Sort, Insertion Sort, Shell Sort, Quick Sort, Selection Sort, Heap Sort, Merge Sort*/
 void swap (int *a, int *b){
     int aux = (*a);
@@ -18,7 +19,9 @@ void bubble_sort_aprimorado(int *vetor, int tamanho_vetor){
         troca = false;
         // Para em tamanho_vetor -i - 1. O -i refere-se aos elementos já ordenados
         for(j = 0; j<tamanho_vetor-i-1; j++){
+            comp_chaves++;
             if(vetor[j]>vetor[j+1]){
+                mov_registros++;
                 swap(&vetor[j], &vetor[j+1]);
                 troca  = true;
             }
@@ -49,10 +52,12 @@ void quick_sort(int *v, int ini, int fim){
    // Primeira etapa, percorre enquanto i<j
     do{
         // percorre i e j até que um elemento da esquerda pertença à direita
-        while(v[i]<pivo) i++;
-        while(v[j]>pivo) j--;
+        while(v[i]<pivo){ i++; comp_chaves++;}
+        while(v[j]>pivo){ j--; comp_chaves++;}
+        comp_chaves+=2; // critério de parada
         // Não é estavel (realiza troca de elementos iguais)
         if(i<=j){
+            mov_registros++;
             swap(&v[i], &v[j]);
             i++;
             j--;
@@ -77,10 +82,13 @@ void insertion_sort(int *vector, int tamanho_vetor){
         // Note que se eu considerar elem<=vector[j] , o algoritmo é instável (pois vai realizar a troca de 2 e 2)
         // se eu considerar elem<vector[j] , o algoritmo é estável (pois não vai realizar a troca de 2 e 2)
         for(j = i-1; j>=0 && elem<vector[j];j--){
+            comp_chaves++;
+            mov_registros++;
             vector[j+1] = vector[j];
         }
         // se o elemento for maior que o da posição vector[j], ele deve ser inserido ali, pois a iteração acabou
         // portanto, insere-se o elemento naquela posição
+        mov_registros++;
         vector[j+1] = elem;
     }
 }
@@ -98,9 +106,12 @@ void shell_sort(int *vector, int tamanho){
             j = i;
             // faz a verificação se o elemento_aux é maior que o elemento comparado pelo gap. Se for maior, atribui ao elemento j o elemento da distância de gap.
             while((j>=gap) && ((elemento_aux > vector[j-gap]) )){
+                comp_chaves++;
+                mov_registros++;
                 vector[j] = vector[j-gap];
                 j -= gap;
               }
+              mov_registros++;
             //Atribui-se o elemento original a sua posição correta (para que ele não seja perdido)
         vector[j]= elemento_aux;
     }
@@ -114,11 +125,14 @@ void selection_sort(int *vector, int tamanho_vetor){
     for(int i = 0; i<tamanho_vetor-1; i++){
         menor_elemento_posicao = i;
         for(int j = i+1;j<tamanho_vetor; j++){
+            comp_chaves++;
             if(vector[j]<vector[menor_elemento_posicao]){
                 menor_elemento_posicao = j;
             }
         }
+        comp_chaves++;
         if(i != menor_elemento_posicao){
+            mov_registros++;
             swap(&(vector[i]), &(vector[menor_elemento_posicao]));
         }
 }
@@ -154,15 +168,12 @@ void intercala(int *v, int ini, int meio, int fim) {
     i = j = 0;
     for (k = ini; k <= fim; k++) {
         // Verificando prioridades
+        comp_chaves++;
+        mov_registros++;
         if (L[i] < R[j]) {
             v[k] = L[i];
             i++;
-        } 
-        // Se prioridades iguais, compara-se tempo decrescentemente
-        else if (L[i] == R[j]) {
-            v[k] = L[i];
-            i++;
-        } 
+        }      
         else {
             v[k] = R[j];
             j++;
@@ -196,16 +207,18 @@ void rearranjar_heap(int *vector, int posicao, int tam_heap){
     maior = posicao;
 
     // encontra o maior elemento entre o pai e dois filhos
+    comp_chaves++;
     if(esq < tam_heap && vector[esq] > vector[maior]){
         maior = esq;
     }
-    if(dir < tam_heap && vector[dir] > vector[maior]){
+    else if(dir < tam_heap && vector[dir] > vector[maior]){
         maior = dir;
     }
 
     // se o elemento da esq ou direita é maior que o pai (posicao)
     // então troca-se os dois elementos
     if(maior != posicao){
+        mov_registros++;
         swap(&(vector[maior]), &(vector[posicao]));
         //chama por maior (o elemento achado)
         rearranjar_heap(vector, maior, tam_heap);
@@ -236,6 +249,7 @@ void heap_sort(int *vector, int tamanho_vetor){
     // troca a raiz com o último elemento do vetor
     int tam_heap = tamanho_vetor;
     for(i = 0; i<tamanho_vetor; i++){
+        mov_registros++;
         swap(&(vector[0]), &(vector[tam_heap-1]));
         // diminui o tamanho da heap, pois já colocamos o elemento 0 na posição correta
         tam_heap--;
@@ -262,6 +276,7 @@ void contagem_dos_menores(int *vector, int tamanho){
     //Começa do segundo elemento, vai até o fim
     for(i = 1;i<tamanho;i++){
         for(j = i-1; j>=0;j--){
+            comp_chaves++;
             if(vector[i]<vector[j])
                 vet_auxiliar[j]++;
             else vet_auxiliar[i]++;
@@ -284,12 +299,21 @@ void contagem_dos_menores(int *vector, int tamanho){
     Ideia: comparar os dígitos menos significativos para mais significativos
     
 */
+
+// Compilação Script
+// chmod +x medir_tempo.sh
+// Rodando script
+// ./medir_tempo.sh
 int main(){
-    int v[10] = {2,1,2,4,120,3,30,3,5,23};
-    int tamanho_vetor = 10;
-    // faz a ordenação por selection sort
-    contagem_dos_menores(v, tamanho_vetor);
-    for(int i=0; i<tamanho_vetor; i++){
+    int tamanho;
+    scanf("%d", &tamanho);
+    int* v = (int *) malloc (tamanho * sizeof(int));
+    mov_registros = 0, comp_chaves = 0;
+    for(int i=0; i<tamanho; i++){
+        scanf(" %d", &v[i]);
+    }
+    mergesort(v, 0, tamanho-1);
+    for(int i=0; i<10; i++){
         printf("%d ", v[i]);
     }
     return 0;
