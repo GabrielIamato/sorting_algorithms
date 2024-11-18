@@ -86,6 +86,7 @@ void insertion_sort(int *vector, int tamanho_vetor){
             mov_registros++;
             vector[j+1] = vector[j];
         }
+        comp_chaves++;
         // se o elemento for maior que o da posição vector[j], ele deve ser inserido ali, pois a iteração acabou
         // portanto, insere-se o elemento naquela posição
         mov_registros++;
@@ -111,10 +112,11 @@ void shell_sort(int *vector, int tamanho){
                 vector[j] = vector[j-gap];
                 j -= gap;
               }
-              mov_registros++;
+            comp_chaves++;
+            mov_registros++;
             //Atribui-se o elemento original a sua posição correta (para que ele não seja perdido)
         vector[j]= elemento_aux;
-    }
+        }
     //repete-se esse processo
     gap /= 2;
     }
