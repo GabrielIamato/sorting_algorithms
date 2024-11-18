@@ -296,9 +296,46 @@ void contagem_dos_menores(int *vector, int tamanho){
 
 /*
     Ordenação de Raízes ou Radix-Sort
-    Ideia: comparar os dígitos menos significativos para mais significativos
-    
+    Ideia: comparar os dígitos menos significativos para mais significativos  
 */
+
+void radixSort(int *v, int n) {
+    int maior = 0;
+    for (int i = 1; i < n; i++) {
+        comp_chaves++;
+        if (v[i] > maior)
+            maior = v[i];
+    }
+
+    for (int base = 1; maior/base > 0; base *= 10 ) {
+        int *aux = (int*)malloc(sizeof(int)*n);
+        int b[10] = {0}; 
+
+        for (int i = 0; i < n; i++) {
+            mov_registros++;
+            int indice = (v[i]/base) % 10;
+            b[indice]++;
+        }
+
+        for (int i = 1; i < 10; i++)
+            //mov_registros++;?? comp_chaves++;??
+            b[i] += b[i-1];
+
+        for (int i = n-1; i >= 0; i--) {
+            mov_registros++;
+            int ind = ( v[i]/base )  % 10;
+            aux[b[ind]-1] = v[i];
+            b[ind]--;
+        }
+
+        for (int i = 0; i < n; i++) {
+            mov_registros++;
+            v[i] = aux[i];
+        }
+            
+        free(aux);
+    }
+}
 
 // Compilação Script
 // chmod +x medir_tempo.sh
