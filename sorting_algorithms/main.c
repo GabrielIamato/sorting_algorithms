@@ -3,7 +3,7 @@
 #include<time.h>
 #include<stdbool.h>
 #include<limits.h>
-int comp_chaves, mov_registros;
+long long int comp_chaves, mov_registros;
 /*Bubble Sort, Insertion Sort, Shell Sort, Quick Sort, Selection Sort, Heap Sort, Merge Sort*/
 void swap (int *a, int *b){
     int aux = (*a);
@@ -351,9 +351,21 @@ int main(){
     for(int i=0; i<tamanho; i++){
         scanf(" %d", &v[i]);
     }
-    mergesort(v, 0, tamanho-1);
-    for(int i=0; i<10; i++){
+    //quick_sort(v, 0, tamanho-1);
+    //contagem_dos_menores(v, tamanho);
+    //radixSort(v, tamanho);
+    //heap_sort(v,tamanho);
+    //shell_sort(v,tamanho);
+    insertion_sort(v, tamanho);
+    //selection_sort(v, tamanho);
+   //bubble_sort_aprimorado(v, tamanho);
+    //mergesort(v, 0, tamanho-1);
+    /*printf("\n");
+    for(int i=0; i<tamanho; i++){
         printf("%d ", v[i]);
-    }
+    }*/
+    printf("%d\n", tamanho);
+    printf("com_chaves=%lld\n", comp_chaves);
+    printf("mov_registros=%lld\n", mov_registros);
     return 0;
 }
