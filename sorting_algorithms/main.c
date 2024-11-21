@@ -206,14 +206,15 @@ void rearranjar_heap(int *vector, int posicao, int tam_heap){
     // elementos da esquerda e da direita
     esq = 2* posicao + 1;
     dir = 2 * posicao +2;
-    maior = posicao;
+    //maior = posicao;
 
     // encontra o maior elemento entre o pai e dois filhos
     comp_chaves++;
-    if(esq < tam_heap && vector[esq] > vector[maior]){
+    if(esq < tam_heap && vector[esq] > vector[posicao]){
         maior = esq;
     }
-    else if(dir < tam_heap && vector[dir] > vector[maior]){
+    else maior = posicao;
+    if(dir < tam_heap && vector[dir] > vector[maior]){
         maior = dir;
     }
 
@@ -250,9 +251,9 @@ void heap_sort(int *vector, int tamanho_vetor){
     construir_heap(vector, tamanho_vetor);
     // troca a raiz com o último elemento do vetor
     int tam_heap = tamanho_vetor;
-    for(i = 0; i<tamanho_vetor; i++){
+    for(i = tam_heap-1; i>0; i--){
         mov_registros++;
-        swap(&(vector[0]), &(vector[tam_heap-1]));
+        swap(&(vector[0]), &(vector[i]));
         // diminui o tamanho da heap, pois já colocamos o elemento 0 na posição correta
         tam_heap--;
         // rearranja a heap
@@ -354,14 +355,14 @@ int main(){
     //quick_sort(v, 0, tamanho-1);
     //contagem_dos_menores(v, tamanho);
     //radixSort(v, tamanho);
-    //heap_sort(v,tamanho);
+    heap_sort(v,tamanho);
     //shell_sort(v,tamanho);
-    insertion_sort(v, tamanho);
+    //insertion_sort(v, tamanho);
     //selection_sort(v, tamanho);
    //bubble_sort_aprimorado(v, tamanho);
     //mergesort(v, 0, tamanho-1);
-    /*printf("\n");
-    for(int i=0; i<tamanho; i++){
+    /*printf("\n");*/
+    /*for(int i=0; i<tamanho; i++){
         printf("%d ", v[i]);
     }*/
     printf("%d\n", tamanho);
