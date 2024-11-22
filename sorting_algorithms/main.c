@@ -301,44 +301,49 @@ void contagem_dos_menores(int *vector, int tamanho){
     Ordenação de Raízes ou Radix-Sort
     Ideia: comparar os dígitos menos significativos para mais significativos  
 */
-
 void radixSort(int *v, int n) {
+    // Identifica o maior valor no vetor para determinar o número de dígitos
     int maior = 0;
     for (int i = 1; i < n; i++) {
-        comp_chaves++;
+        comp_chaves++; // Incrementa contador de comparações de chaves (métrica de desempenho)
         if (v[i] > maior)
-            maior = v[i];
+            maior = v[i]; // Atualiza o maior valor encontrado
     }
 
-    for (int base = 1; maior/base > 0; base *= 10 ) {
-        int *aux = (int*)malloc(sizeof(int)*n);
-        int b[10] = {0}; 
+    // Realiza a ordenação para cada base (posição do dígito: unidades, dezenas, centenas, etc.)
+    for (int base = 1; maior / base > 0; base *= 10) {
+        int *aux = (int*)malloc(sizeof(int) * n); // Vetor auxiliar para armazenar a ordenação parcial
+        int b[10] = {0}; // Vetor de contagem (frequência dos dígitos 0-9 na posição atual)
 
+        // Conta a frequência de cada dígito para a base atual
         for (int i = 0; i < n; i++) {
-            mov_registros++;
-            int indice = (v[i]/base) % 10;
-            b[indice]++;
+            mov_registros++; // Incrementa contador de movimentações de registros (métrica de desempenho)
+            int indice = (v[i] / base) % 10; // Calcula o dígito correspondente
+            b[indice]++; // Incrementa a contagem do dígito
         }
 
+        // Converte a contagem em índices cumulativos (usado para estabilidade da ordenação)
         for (int i = 1; i < 10; i++)
-            //mov_registros++;?? comp_chaves++;??
-            b[i] += b[i-1];
+            b[i] += b[i - 1]; // Acumula as contagens
 
-        for (int i = n-1; i >= 0; i--) {
-            mov_registros++;
-            int ind = ( v[i]/base )  % 10;
-            aux[b[ind]-1] = v[i];
-            b[ind]--;
+        // Ordena os elementos de acordo com o dígito atual (em ordem reversa para estabilidade)
+        for (int i = n - 1; i >= 0; i--) {
+            mov_registros++; // Incrementa contador de movimentações
+            int ind = (v[i] / base) % 10; // Obtém o dígito correspondente
+            aux[b[ind] - 1] = v[i]; // Coloca o elemento no índice correto no vetor auxiliar
+            b[ind]--; // Decrementa o índice disponível para o dígito
         }
 
+        // Copia o vetor auxiliar de volta para o vetor original
         for (int i = 0; i < n; i++) {
-            mov_registros++;
-            v[i] = aux[i];
+            mov_registros++; // Incrementa contador de movimentações
+            v[i] = aux[i]; // Atualiza o vetor original
         }
-            
-        free(aux);
+
+        free(aux); // Libera a memória alocada para o vetor auxiliar
     }
 }
+
 
 // Compilação Script
 // chmod +x medir_tempo.sh
